@@ -1,11 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="./static/css/estilos.css">
 </head>
+
 <body>
-  <h1>Hola mundo</h1>
+    <div class="logo-centrado">
+        <img src="./static/imagenes/logo.png" alt="logo">
+    </div>
+    <h1>Dashboard - innovacionalcuadrado TechXVII </h1><br>
+    <div class="container">
+        <aside class="sidebar">
+            <table>
+                <tr>
+                    <td class="contenedor-centrado"><a href="listado.html">Listar todos los productos</a></td>
+                </tr>
+                <tr>
+                    <td class="contenedor-centrado"><a href="altas.html">Dar de altas productos</a></td>
+                </tr>
+                <tr>
+                    <td class="contenedor-centrado"><a href="modificaciones.html">Modificar datos de algún producto</a></td>
+                </tr>
+                <tr>
+                    <td class="contenedor-centrado"><a href="listadoEliminar.html">Eliminar productos</a></td>
+                </tr>
+            </table>
+        </aside>
+        <div class="dashboard">
+            <div class="dashboard-container">
+                <div class="card">
+                    <h2>Total Productos</h2>
+                    <p id="total-productos">0</p>
+                </div>
+                <div class="card">
+                    <h2>Productos en Stock</h2>
+                    <p id="productos-stock">0</p>
+                </div>
+                <div class="card">
+                    <h2>Productos Vendidos</h2>
+                    <p id="productos-vendidos">0</p>
+                </div>
+                <div class="card">
+                    <h2>Ingresos Totales</h2>
+                    <p id="ingresos-totales">$0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchDashboardData() {
+            try {
+                const response = await fetch("https://nkromantte.pythonanywhere.com/productos");
+                const productos = await response.json();
+
+                const totalProductos = productos.length;
+                const productosStock = productos.reduce((acc, producto) => acc + producto.cantidad, 0);
+                const productosVendidos = 0; // Asume una lógica para calcular productos vendidos
+                const ingresosTotales = productos.reduce((acc, producto) => acc + (producto.cantidad * producto.precio), 0);
+
+                document.getElementById('total-productos').innerText = totalProductos;
+                document.getElementById('productos-stock').innerText = productosStock;
+                document.getElementById('productos-vendidos').innerText = productosVendidos;
+                document.getElementById('ingresos-totales').innerText = `$${ingresosTotales.toFixed(2)}`;
+            } catch (error) {
+                console.error("Error fetching data: ", error);
+            }
+        }
+
+        window.onload = fetchDashboardData;
+    </script>
 </body>
+
 </html>
